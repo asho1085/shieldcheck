@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set title = "Login" %}
+{% set subtitle = "Access your dashboard and saved history" %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-head">
+      <div class="auth-logo">🛡️</div>
+      <h1>Welcome back</h1>
+      <p>Login to continue.</p>
+    </div>
+
+    <form method="post" class="form">
+      <label>
+        <span>Username</span>
+        <input name="username" placeholder="e.g. vishal" required />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" placeholder="Your password" required />
+      </label>
+
+      <button class="btn primary full" type="submit">Login</button>
+    </form>
+
+    <div class="auth-foot">
+      <span>New here?</span>
+      <a href="{{ url_for('register') }}">Create an account</a>
+    </div>
+  </div>
+
+  <div class="auth-side">
+    <div class="big-card">
+      <h2>Track every check</h2>
+      <p>Your URL checks are saved securely per user, with labels and confidence.</p>
+      <ul>
+        <li>Personal history</li>
+        <li>Quick stats</li>
+        <li>Clean dashboard UI</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

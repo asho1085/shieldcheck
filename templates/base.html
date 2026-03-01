@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title or "ShieldCheck" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    {% if current_user.is_authenticated %}
+      <aside class="side">
+        <div class="brand">
+          <div class="logo">🛡️</div>
+          <div>
+            <div class="brand-name">ShieldCheck</div>
+            <div class="brand-sub">Phishing URL Analyzer</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+        </nav>
+
+        <div class="side-footer">
+          <div class="who">
+            <div class="dot"></div>
+            <div>
+              <div class="who-name">{{ current_user.username }}</div>
+              <div class="who-sub">Logged in</div>
+            </div>
+          </div>
+
+          <form method="post" action="{{ url_for('logout') }}">
+            <button class="btn ghost full" type="submit">Logout</button>
+          </form>
+        </div>
+      </aside>
+    {% endif %}
+
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">{{ title or "Dashboard" }}</div>
+          <div class="page-sub">{{ subtitle or "" }}</div>
+        </div>
+      </div>
+
+      <div class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="toasts">
+              {% for category, message in messages %}
+                <div class="toast {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+</body>
+</html>

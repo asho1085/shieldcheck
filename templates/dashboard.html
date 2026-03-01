@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% set title = "Dashboard" %}
+{% set subtitle = "Check a URL and keep your history saved in database" %}
+
+{% block content %}
+
+<div class="grid-3">
+  <div class="stat">
+    <div class="stat-label">Total Checks</div>
+    <div class="stat-value">{{ stats.total }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Legitimate</div>
+    <div class="stat-value">{{ stats.legit }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Phishing</div>
+    <div class="stat-value">{{ stats.phishing }}</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h2>URL Check</h2>
+    <p>Paste a link and get instant prediction.</p>
+  </div>
+
+  <form method="post" class="checker">
+    <input class="url-input" type="text" name="url" placeholder="https://example.com/login" required />
+    <button class="btn primary" type="submit">Analyze</button>
+  </form>
+
+  {% if error %}
+    <div class="result danger">{{ error }}</div>
+  {% endif %}
+
+  {% if result %}
+    <div class="result {% if result.label == 'Legitimate Website' %}ok{% else %}danger{% endif %}">
+      <div class="result-title">{{ result.label }}</div>
+      <div class="result-meta">
+        {% if result.confidence is not none %}
+          <span>Confidence: <strong>{{ result.confidence }}%</strong></span>
+        {% endif %}
+        {% if result.reason %}
+          <span>Reason: <strong>{{ result.reason }}</strong></span>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<div class="panel">
+  <div class="panel-head row">
+    <div>
+      <h2>History</h2>
+      <p>Last 50 checks (stored per user).</p>
+    </div>
+
+    <form method="get" action="{{ url_for('dashboard') }}" class="filters">
+      <input name="q" value="{{ q }}" placeholder="Search URL..." />
+      <select name="label">
+        <option value="">All</option>
+        <option value="Legitimate Website" {% if label_filter=='Legitimate Website' %}selected{% endif %}>Legitimate</option>
+        <option value="Phishing Website" {% if label_filter=='Phishing Website' %}selected{% endif %}>Phishing</option>
+      </select>
+      <button class="btn" type="submit">Filter</button>
+      <a class="btn ghost" href="{{ url_for('dashboard') }}">Reset</a>
+    </form>
+  </div>
+
+  <div class="table">
+    <div class="trow thead">
+      <div>Time</div>
+      <div>URL</div>
+      <div>Status</div>
+      <div>Confidence</div>
+    </div>
+
+    {% for h in history %}
+      <div class="trow">
+        <div class="muted">{{ h.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+        <div class="mono">{{ h.raw_url }}</div>
+        <div class="{% if h.label=='Legitimate Website' %}pill ok{% else %}pill danger{% endif %}">
+          {{ h.label }}
+        </div>
+        <div class="muted">
+          {% if h.confidence is not none %}{{ "%.2f"|format(h.confidence) }}%{% else %}—{% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">No history yet. Try checking a URL.</div>
+    {% endfor %}
+  </div>
+
+  <div class="panel-foot">
+    <form method="post" action="{{ url_for('clear_history') }}">
+      <button class="btn danger" type="submit">Clear My History</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

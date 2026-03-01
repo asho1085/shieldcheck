@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set title = "Register" %}
+{% set subtitle = "Create an account to store your history" %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-head">
+      <div class="auth-logo">✨</div>
+      <h1>Create account</h1>
+      <p>It takes less than a minute.</p>
+    </div>
+
+    <form method="post" class="form">
+      <label>
+        <span>Username</span>
+        <input name="username" placeholder="Choose a username" required />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" placeholder="Min 6 characters" required />
+      </label>
+
+      <label>
+        <span>Confirm password</span>
+        <input type="password" name="confirm" placeholder="Repeat password" required />
+      </label>
+
+      <button class="btn primary full" type="submit">Create account</button>
+    </form>
+
+    <div class="auth-foot">
+      <span>Already have an account?</span>
+      <a href="{{ url_for('login') }}">Login</a>
+    </div>
+  </div>
+
+  <div class="auth-side">
+    <div class="big-card">
+      <h2>Built for projects</h2>
+      <p>Perfect for your BSc IT submission: auth + database + ML integration.</p>
+      <ul>
+        <li>SQLite DB (simple)</li>
+        <li>Clean UI</li>
+        <li>Deployment-ready</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
