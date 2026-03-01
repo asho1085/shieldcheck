@@ -1,7 +1,8 @@
-flask
-numpy
-pandas
-scikit-learn
-gunicorn
-flask_sqlalchemy
-werkzeug
+flask==3.0.2
+gunicorn==21.2.0
+flask-sqlalchemy==3.1.1
+flask-login==0.6.3
+werkzeug==3.0.1
+pandas==2.2.1
+numpy==1.26.4
+scikit-learn==1.4.1.post1
